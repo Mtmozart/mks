@@ -1,21 +1,14 @@
-import { DataSource } from 'typeorm';
+import { TypeOrmModuleOptions } from '@nestjs/typeorm';
+import { User } from 'src/modules/user/entity/user.entity';
 
-export const databaseProviders = [
-  {
-    provide: 'DATA_SOURCE',
-    useFactory: async () => {
-      const dataSource = new DataSource({
-        type: 'mysql',
-        host: 'localhost',
-        port: 3306,
-        username: 'root',
-        password: 'root',
-        database: 'test',
-        entities: [],
-        synchronize: true,
-      });
-
-      return dataSource.initialize();
-    },
-  },
-];
+export const typeOrmConfig: TypeOrmModuleOptions = {
+  type: 'postgres',
+  host: 'postgres',
+  port: 5432,
+  username: 'postgres',
+  password: 'postgres',
+  database: 'postgres',
+  entities: [User],
+  ssl: false,
+  synchronize: false,
+};

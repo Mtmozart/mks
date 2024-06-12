@@ -1,6 +1,6 @@
 import 'dotenv/config';
 
-export const EnConfig = {
+export const EnvConfig = {
   database: {
     HOST_DB: process.env.HOST_DB,
     PORT_DB: +process.env.PORT_DB,

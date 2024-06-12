@@ -1,4 +1,5 @@
 version: '3.5'
+
 services:
   psql: 
     image: postgres:14.0
@@ -7,11 +8,12 @@ services:
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: postgres
     ports:
       - "5423:5432"
     networks:
       - mks-bridge
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
   
   redis:
     image: redis
@@ -20,6 +22,7 @@ services:
       - mks-bridge
     ports:
       - "6379:6379"
+  
   mks:
     build:
       context: .
@@ -29,10 +32,10 @@ services:
     ports:
       - "3000:3000"
     environment:
-      POSTGRES_HOST: psql
+      POSTGRES_HOST: postgres
       POSTGRES_PORT: 5432
-      POSTGRES_USER: root
-      POSTGRES_PASSWORD: umasenhaforte
+      POSTGRES_USER: postgres 
+      POSTGRES_PASSWORD: postgres 
       REDIS_HOST: redis
       REDIS_PORT: 6379
     depends_on:
@@ -40,7 +43,9 @@ services:
       - redis
     volumes:
       - ./src:/app/src
- 
+    networks:
+      - mks-bridge
+
   pgadmin:
     image: dpage/pgadmin4
     restart: always
@@ -58,3 +63,7 @@ services:
 networks:
   mks-bridge:
     driver: bridge
+    name: mks_mks-bridge
+
+volumes:
+  postgres-data:
