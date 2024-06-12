@@ -1,0 +1,60 @@
+version: '3.5'
+services:
+  psql: 
+    image: postgres:14.0
+    restart: always
+    container_name: postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: postgres
+    ports:
+      - "5423:5432"
+    networks:
+      - mks-bridge
+  
+  redis:
+    image: redis
+    container_name: redis-mks 
+    networks:
+      - mks-bridge
+    ports:
+      - "6379:6379"
+  mks:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: mks-app
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      POSTGRES_HOST: psql
+      POSTGRES_PORT: 5432
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: umasenhaforte
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+    depends_on:
+      - psql
+      - redis
+    volumes:
+      - ./src:/app/src
+ 
+  pgadmin:
+    image: dpage/pgadmin4
+    restart: always
+    container_name: pgadmin
+    networks:
+      - mks-bridge
+    ports:
+      - "5050:80"
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    depends_on:
+      - psql
+
+networks:
+  mks-bridge:
+    driver: bridge
