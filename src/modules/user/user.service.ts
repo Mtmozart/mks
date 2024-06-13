@@ -1,11 +1,11 @@
-import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { User } from './entity/user.entity';
+import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { CreateUserDto } from './dto/request/create-user-dto';
 import { UserValidation } from './validations/user-validation';
+import { CreateUserDto } from './dto/request/create-user-dto';
 import { toUserEntity } from './factory/toUserEntity';
-import { hash, genSalt } from 'bcrypt';
+import { genSalt, hash } from 'bcrypt';
 
 @Injectable()
 export class UserService {
@@ -28,15 +28,29 @@ export class UserService {
   }
 
   async findOne(id: string): Promise<User> {
-    return this.usersRepository.findOneBy({ id });
+    const user = await this.usersRepository.findOneBy({ id });
+    if (!user) {
+      throw new BadRequestException('Usuário não encontrado.');
+    }
+    return user;
   }
 
-  async update(id: string, updates: Partial<CreateUserDto>): Promise<User> {
-    await this.usersRepository.update(id, updates);
-    return this.findOne(id);
+  async update(id: string, updates: Partial<User>): Promise<User> {
+    const user = await this.findOne(id);
+
+    if (updates.password) {
+      const salt = await genSalt();
+      user.password = await hash(user.password, salt);
+    }
+
+    if (updates.email || updates.email) {
+      await this.userValidate.userValidationCreate(updates);
+    }
+    return await this.usersRepository.save({ ...user, ...updates });
   }
 
-  async remove(id: number): Promise<void> {
+  async remove(id: string): Promise<void> {
+    await this.findOne(id);
     await this.usersRepository.delete(id);
   }
 }

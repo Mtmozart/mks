@@ -11,7 +11,7 @@ export class UserValidation {
     private usersRepository: Repository<User>,
   ) {}
 
-  async userValidationCreate(createUserDto: CreateUserDto) {
+  async userValidationCreate(createUserDto: CreateUserDto | Partial<User>) {
     const userByEmail = await this.usersRepository.findOne({
       where: {
         email: createUserDto.email,

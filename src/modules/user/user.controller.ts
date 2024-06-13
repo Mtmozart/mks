@@ -1,4 +1,12 @@
-import { Body, Controller, Delete, Get, Patch, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Patch,
+  Post,
+} from '@nestjs/common';
 import { ApiBody, ApiTags } from '@nestjs/swagger';
 import { CreateUserDto } from './dto/request/create-user-dto';
 import { UserService } from './user.service';
@@ -17,18 +25,23 @@ export class UserController {
     );
   }
 
-  @Get('/id')
-  async getProfile() {
-    return 'hello';
+  @Get('/:id')
+  async getProfile(@Param('id') id: string) {
+    return await this.userService.findOne(id);
+  }
+
+  @Get('all')
+  async findAll() {
+    return await this.userService.findAll();
   }
 
   @Patch('update/:userId')
-  async update() {
-    return 'olá';
+  async update(@Param('id') id: string, updates: Partial<CreateUserDto>) {
+    return await this.userService.update(id, updates);
   }
 
   @Delete('delete/:userId')
-  async delete() {
-    return 'this.authService.deleteAccount(userId, password);';
+  async delete(@Param('id') id: string) {
+    return await this.userService.remove(id);
   }
 }
