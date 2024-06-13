@@ -1,11 +1,15 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  ForbiddenException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { User } from './entity/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { UserValidation } from './validations/user-validation';
 import { CreateUserDto } from './dto/request/create-user-dto';
 import { toUserEntity } from './factory/toUserEntity';
-import { genSalt, hash } from 'bcrypt';
+import { compare, genSalt, hash } from 'bcrypt';
 
 @Injectable()
 export class UserService {
@@ -23,8 +27,8 @@ export class UserService {
     return this.usersRepository.save(user);
   }
 
-  findAll(): Promise<User[]> {
-    return this.usersRepository.find();
+  async findAll(): Promise<User[]> {
+    return await this.usersRepository.find();
   }
 
   async findOne(id: string): Promise<User> {
@@ -52,5 +56,19 @@ export class UserService {
   async remove(id: string): Promise<void> {
     await this.findOne(id);
     await this.usersRepository.delete(id);
+  }
+
+  async authenticate(email: string, password: string): Promise<User> {
+    const user = await this.usersRepository.findOne({
+      where: { email: email },
+    });
+    if (!user) {
+      throw new NotFoundException('Usuário não encontrado.');
+    }
+    const passwordMatches = await compare(password, user.password);
+    if (!passwordMatches) {
+      throw new ForbiddenException('Acesso negado.');
+    }
+    return user;
   }
 }

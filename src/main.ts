@@ -9,7 +9,9 @@ async function bootstrap() {
     .setTitle('MKS-TEST')
     .setDescription('MKS-TEST API description')
     .setVersion('1.0')
+    .addBearerAuth({ type: 'http', scheme: 'bearer', bearerFormat: 'JWT' })
     .addTag('User')
+    .addTag('Auth')
     .build();
 
   const document = SwaggerModule.createDocument(app, config);

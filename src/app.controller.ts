@@ -4,6 +4,6 @@ import { Controller, Get } from '@nestjs/common';
 export class AppController {
   @Get()
   getHello(): string {
-    return ' String(process.env.NODE_ENV)';
+    return String(process.env.NODE_ENV);
   }
 }
