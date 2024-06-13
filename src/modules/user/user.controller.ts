@@ -29,18 +29,17 @@ export class UserController {
   async getProfile(@Param('id') id: string) {
     return await this.userService.findOne(id);
   }
-
   @Get('all')
   async findAll() {
-    return await this.userService.findAll();
+    return this.userService.findAll();
   }
 
-  @Patch('update/:userId')
+  @Patch('update/:id')
   async update(@Param('id') id: string, updates: Partial<CreateUserDto>) {
     return await this.userService.update(id, updates);
   }
 
-  @Delete('delete/:userId')
+  @Delete('delete/:id')
   async delete(@Param('id') id: string) {
     return await this.userService.remove(id);
   }
