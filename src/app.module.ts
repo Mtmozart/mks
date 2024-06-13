@@ -9,5 +9,6 @@ import { UserModule } from './modules/user/user.module';
   imports: [TypeOrmModule.forRoot(typeOrmConfig), UserModule],
   controllers: [AppController],
   providers: [AppService],
+  exports: [TypeOrmModule],
 })
 export class AppModule {}

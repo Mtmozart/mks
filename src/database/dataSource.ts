@@ -10,5 +10,5 @@ export const typeOrmConfig: TypeOrmModuleOptions = {
   database: 'postgres',
   entities: [User],
   ssl: false,
-  synchronize: false,
+  synchronize: true,
 };

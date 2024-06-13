@@ -27,9 +27,6 @@ export class User {
   @Column()
   phone: string;
 
-  @Column()
-  birthDate: Date;
-
   @CreateDateColumn({ name: 'created_at' })
   createdAt: Date;
 
