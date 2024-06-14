@@ -9,14 +9,24 @@ import { JwtService } from '@nestjs/jwt';
 import { Request } from 'express';
 import { CacheService } from '../cache/cache.service';
 import { IS_PUBLIC_KEY, jwtConstants } from './constant/constant';
+import { PassportStrategy } from '@nestjs/passport';
+import { ExtractJwt, Strategy } from 'passport-jwt';
 
 @Injectable()
-export class AuthGuard implements CanActivate {
+export class AuthGuard
+  extends PassportStrategy(Strategy)
+  implements CanActivate
+{
   constructor(
     private jwtService: JwtService,
     private reflector: Reflector,
     private redisCache: CacheService,
-  ) {}
+  ) {
+    super({
+      jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+      secretOrKey: jwtConstants.secret,
+    });
+  }
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const isPublic = this.reflector.getAllAndOverride<boolean>(IS_PUBLIC_KEY, [

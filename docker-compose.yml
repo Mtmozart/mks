@@ -59,6 +59,16 @@ services:
       PGADMIN_DEFAULT_PASSWORD: admin
     depends_on:
       - psql
+        
+  redis-commander:
+    image: rediscommander/redis-commander
+    container_name: redis-commander
+    networks:
+      - mks-bridge
+    ports:
+      - "8081:8081"
+    environment:
+      REDIS_HOSTS: local:redis-mks:6379
 
 networks:
   mks-bridge:
