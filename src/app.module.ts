@@ -6,6 +6,8 @@ import { typeOrmConfig } from './database/dataSource';
 import { UserModule } from './modules/user/user.module';
 import { AppCacheModule } from './modules/cache/cache.module';
 import { AuthModule } from './modules/auth/auth.module';
+import { APP_GUARD } from '@nestjs/core';
+import { AuthGuard } from './modules/auth/auth.guard';
 
 @Module({
   imports: [
@@ -15,7 +17,13 @@ import { AuthModule } from './modules/auth/auth.module';
     AppCacheModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    AppService,
+    {
+      provide: APP_GUARD,
+      useClass: AuthGuard,
+    },
+  ],
   exports: [TypeOrmModule],
 })
 export class AppModule {}

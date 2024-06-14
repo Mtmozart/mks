@@ -5,8 +5,11 @@ import { AuthService } from './auth.service';
 import { AppCacheModule } from '../cache/cache.module';
 import { JwtModule } from '@nestjs/jwt';
 import { jwtConstants } from './constant/constant';
+import { PassportModule } from '@nestjs/passport';
+
 @Module({
   imports: [
+    PassportModule.register({ defaultStrategy: 'jwt' }),
     AppCacheModule,
     UserModule,
     JwtModule.register({
@@ -15,7 +18,8 @@ import { jwtConstants } from './constant/constant';
       signOptions: { expiresIn: '360000000s' },
     }),
   ],
-  controllers: [AuthController],
   providers: [AuthService],
+  controllers: [AuthController],
+  exports: [AuthService],
 })
 export class AuthModule {}

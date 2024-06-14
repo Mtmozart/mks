@@ -13,6 +13,6 @@ export class AuthController {
   @HttpCode(HttpStatus.OK)
   @Post('Login')
   async singin(@Body() auth: AuthDTO) {
-    return await this.authService.singIn(auth);
+    return await this.authService.signIn(auth);
   }
 }

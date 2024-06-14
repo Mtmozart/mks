@@ -9,5 +9,6 @@ import { UserValidation } from './validations/user-validation';
   imports: [TypeOrmModule.forFeature([User])],
   controllers: [UserController],
   providers: [UserService, UserValidation],
+  exports: [UserService],
 })
 export class UserModule {}
