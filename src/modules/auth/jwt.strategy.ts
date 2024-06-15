@@ -1,32 +1,51 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
-import { AuthService } from './auth.service';
-import { JwtPayload } from './jwt.payloads';
+import { JwtService } from '@nestjs/jwt';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { CacheService } from '../cache/cache.service';
+import { Request } from 'express';
+import { IS_PUBLIC_KEY, jwtConstants } from './constant/constant';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
   constructor(
-    private readonly authService: AuthService,
     private redisCache: CacheService,
+    private jwtService: JwtService,
   ) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-      secretOrKey: process.env.JWT_SECRET,
+      secretOrKey: IS_PUBLIC_KEY,
     });
   }
 
-  async validate(payload: JwtPayload) {
-    const redisToken = await this.cacheService.retrieveData(token);
+  async validate(request: Request) {
+    const authHeader = request.headers.authorization;
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+      throw new UnauthorizedException('Token not found in header');
+    }
 
-    /*const user = await this.authService.validateUser(payload);
+    const token = authHeader.split(' ')[1];
+    if (!token) {
+      throw new UnauthorizedException('Token not found in header');
+    }
 
+    const redisToken = await this.redisCache.retrieveData(authHeader);
+    if (!authHeader || !redisToken) {
+      throw new UnauthorizedException('Token not found or invalid in Redis');
+    }
+    console.log(authHeader);
+    console.log('---------');
+    console.log(redisToken);
 
-    if (!user) {
-      throw new UnauthorizedException();
-    }*/
+    try {
+      const payload = await this.jwtService.verifyAsync(redisToken, {
+        secret: jwtConstants.secret,
+      });
 
-    return user;
+      request['user'] = payload;
+    } catch {
+      throw new UnauthorizedException('Erro ao validar o token' + authHeader);
+    }
+    return true;
   }
 }
