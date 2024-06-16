@@ -32,6 +32,7 @@ export class UserController {
   @PublicRoutes()
   @Get('find-all')
   async findAll() {
+    console.log('hello');
     return await this.userService.findAll();
   }
 

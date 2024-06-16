@@ -7,6 +7,7 @@ COPY ./.env.production ./env
 
 RUN npm install --quiet --no-optional --no-fund --loglevel=error
 
-RUN npm run build
+#RUN npm run build
+EXPOSE 9229
 
-CMD ["npm", "run", "start:prod"]
+CMD ["npm", "run", "start:debug"]

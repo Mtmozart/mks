@@ -3,16 +3,17 @@ import { AppModule } from './app.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { appConfig } from './config/app.config';
 import { Logger, ValidationPipe } from '@nestjs/common';
+import { corsOptions } from './config/cors.option';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule, { cors: corsOptions });
   app.useLogger(new Logger());
   app.useGlobalPipes(new ValidationPipe());
   const config = new DocumentBuilder()
     .setTitle('MKS-TEST')
     .setDescription('MKS-TEST API description')
     .setVersion('1.0')
-    .addBearerAuth({ type: 'http', scheme: 'Bearer', bearerFormat: 'JWT' })
+    .addBearerAuth()
     .addTag('User')
     .addTag('Auth')
     .build();
