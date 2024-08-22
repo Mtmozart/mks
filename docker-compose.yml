@@ -1,29 +1,40 @@
-  version: '3.5'
+version: "3.8"
+services:
+  mks-postgres:
+    image: postgres:15.3-alpine
+    container_name: mks-postgres
+    restart: always
+    environment:
+      POSTGRES_USER: ${USER_DB}
+      POSTGRES_PASSWORD: ${PASSWORD_DB}
+    ports:
+      - 5432:5432
+    volumes:
+      - ./data/postgres:/var/lib/postgresql/data
+    networks:
+      - mks-bridge
+  mks-pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: mks-pgadmin
+    restart: always
+    depends_on:
+      - mks-postgres
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
+    ports:
+      - 8080:80
+    networks:
+      - mks-bridge
 
-  services:
-    psql: 
-      image: postgres:14.0
-      restart: always
-      container_name: postgres
-      environment:
-        POSTGRES_USER: postgres
-        POSTGRES_PASSWORD: postgres
-      ports:
-        - "5423:5432"
-      networks:
-        - mks-bridge
-      volumes:
-        - postgres-data:/var/lib/postgresql/data
-    
-    redis:
+  redis:
       image: redis
       container_name: redis-mks 
       networks:
         - mks-bridge
       ports:
         - "6379:6379"
-    
-    mks:
+  mks:
       build:
         context: .
         dockerfile: Dockerfile
@@ -31,16 +42,15 @@
       restart: unless-stopped
       ports:
         - "3000:3000"
-        - "9229:9229"
       environment:
-        POSTGRES_HOST: postgres
+        DB_HOST: mks-postgres
         POSTGRES_PORT: 5432
-        POSTGRES_USER: postgres 
-        POSTGRES_PASSWORD: postgres 
+        POSTGRES_USER: postgres
+        POSTGRES_PASSWORD: password
         REDIS_HOST: redis
         REDIS_PORT: 6379
       depends_on:
-        - psql
+        - mks-postgres
         - redis
       volumes:
         - ./src:/app/src
@@ -52,34 +62,9 @@
       networks:
         - mks-bridge
 
-    pgadmin:
-      image: dpage/pgadmin4
-      restart: always
-      container_name: pgadmin
-      networks:
-        - mks-bridge
-      ports:
-        - "5050:80"
-      environment:
-        PGADMIN_DEFAULT_EMAIL: admin@admin.com
-        PGADMIN_DEFAULT_PASSWORD: admin
-      depends_on:
-        - psql
-          
-    redis-commander:
-      image: rediscommander/redis-commander
-      container_name: redis-commander
-      networks:
-        - mks-bridge
-      ports:
-        - "8081:8081"
-      environment:
-        REDIS_HOSTS: local:redis-mks:6379
+networks:
+  mks-bridge:
+    driver: bridge
 
-  networks:
-    mks-bridge:
-      driver: bridge
-      name: mks_mks-bridge
-
-  volumes:
-    postgres-data:
+volumes:
+  postgres-data:

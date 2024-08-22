@@ -3,7 +3,7 @@ FROM node:latest
 WORKDIR /src
 
 COPY . .
-COPY ./.env.production ./env
+COPY ./.env ./env
 
 RUN npm install --quiet --no-optional --no-fund --loglevel=error
 

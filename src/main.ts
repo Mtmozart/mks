@@ -13,7 +13,14 @@ async function bootstrap() {
     .setTitle('MKS-TEST')
     .setDescription('MKS-TEST API description')
     .setVersion('1.0')
-    .addBearerAuth()
+    .addBearerAuth(
+      {
+        type: 'http',
+        scheme: 'bearer',
+        bearerFormat: 'JWT',
+      },
+      'JWT-auth',
+    )
     .addTag('User')
     .addTag('Auth')
     .build();
