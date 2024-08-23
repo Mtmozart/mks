@@ -7,8 +7,8 @@ export class CacheController {
 
   @Get()
   async find() {
-    //return await this.cacheService.retrieveData('');
-    return 'true';
+    return await this.cacheService.retrieveData('');
+    // return 'true';
   }
 
   @Post()

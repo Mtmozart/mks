@@ -8,6 +8,7 @@ import { corsOptions } from './config/cors.option';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, { cors: corsOptions });
   app.useLogger(new Logger());
+  app.setGlobalPrefix('api');
   app.useGlobalPipes(new ValidationPipe());
   const config = new DocumentBuilder()
     .setTitle('MKS-TEST')

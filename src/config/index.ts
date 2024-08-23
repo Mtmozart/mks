@@ -13,4 +13,7 @@ export const EnvConfig = {
     HOST: process.env.REDIS_HOST,
     PORT: +process.env.REDIS_PORT,
   },
+  jwt: {
+    secret: process.env.SECRET,
+  },
 };

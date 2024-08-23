@@ -13,9 +13,8 @@ import { CreateUserDto } from './dto/request/create-user-dto';
 import { UserService } from './user.service';
 import { DefaultResponseDTO } from './dto/response/default-response-dto';
 import { PublicRoutes } from '../auth/constant/constant';
-import { AuthGuard } from '@nestjs/passport';
+import { AuthGuard } from '../auth/auth.guard';
 
-@PublicRoutes()
 @ApiTags('User')
 @Controller('user')
 export class UserController {
@@ -36,15 +35,14 @@ export class UserController {
     return await this.userService.findAll();
   }
 
+  @ApiBearerAuth('JWT-auth')
   @Get('/:id')
-  @UseGuards(AuthGuard('jwt'))
-  @ApiBearerAuth()
+  @UseGuards(AuthGuard)
   async getProfile(@Param('id') id: string) {
     return await this.userService.findOne(id);
   }
 
   @Patch('update/:id')
-  @UseGuards(AuthGuard('jwt'))
   async update(
     @Param('id') id: string,
     @Body() updates: Partial<CreateUserDto>,
@@ -53,7 +51,6 @@ export class UserController {
   }
 
   @Delete('delete/:id')
-  @UseGuards(AuthGuard('jwt'))
   async delete(@Param('id') id: string) {
     return this.userService.remove(id);
   }

@@ -10,6 +10,7 @@ export class CacheService {
     const value = await this.cacheManager.get<{ access_token?: string }>(
       bearer,
     );
+
     return value?.access_token || null;
   }
 
