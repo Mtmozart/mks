@@ -33,8 +33,6 @@ git clone git@github.com:Mtmozart/mks.git
 cd seu-projeto
 ```
 
-````
-
 ### Passo 2: Configurar Variáveis de Ambiente
 
 Crie um arquivo `.env` na raiz do projeto e configure as variáveis de ambiente necessárias:
@@ -121,4 +119,3 @@ O processo de autenticação funciona da seguinte forma:
 ## Licença
 
 Este projeto está licenciado sob a [MIT License](LICENSE).
-````
