@@ -46,7 +46,7 @@ export class UserService {
 
     if (updates.password) {
       const salt = await genSalt();
-      user.password = await hash(user.password, salt);
+      updates.password = await hash(user.password, salt);
     }
 
     if (updates.email || updates.email) {

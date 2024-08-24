@@ -14,6 +14,7 @@ import { UserService } from './user.service';
 import { DefaultResponseDTO } from './dto/response/default-response-dto';
 import { PublicRoutes } from '../auth/constant/constant';
 import { AuthGuard } from '../auth/auth.guard';
+import { UpdateUserDto } from './dto/request/update-user-dto';
 
 @ApiTags('User')
 @Controller('user')
@@ -42,15 +43,16 @@ export class UserController {
     return await this.userService.findOne(id);
   }
 
+  @ApiBearerAuth('JWT-auth')
   @Patch('update/:id')
-  async update(
-    @Param('id') id: string,
-    @Body() updates: Partial<CreateUserDto>,
-  ) {
+  @UseGuards(AuthGuard)
+  async update(@Param('id') id: string, @Body() updates: UpdateUserDto) {
     return await this.userService.update(id, updates);
   }
 
+  @ApiBearerAuth('JWT-auth')
   @Delete('delete/:id')
+  @UseGuards(AuthGuard)
   async delete(@Param('id') id: string) {
     return this.userService.remove(id);
   }

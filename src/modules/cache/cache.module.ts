@@ -1,5 +1,4 @@
 import { Module } from '@nestjs/common';
-import { CacheController } from './cache.controller';
 import { CacheService } from './cache.service';
 import { CacheModule } from '@nestjs/cache-manager';
 import { RedisClientOptions } from 'redis';
@@ -15,7 +14,7 @@ import { redisStore } from 'cache-manager-redis-yet';
       },
     }),
   ],
-  controllers: [CacheController],
+  controllers: [],
   providers: [CacheService],
   exports: [CacheService],
 })
