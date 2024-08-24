@@ -116,6 +116,10 @@ O processo de autenticação funciona da seguinte forma:
 3. Se o token for válido, a requisição é permitida; caso contrário, é negada.
 4. Depois é verificado os dados do usuário no jwt strategy.
 
+## Rota da api.
+
+Através do `http://localhost:3000/api`
+
 ## Licença
 
 Este projeto está licenciado sob a [MIT License](LICENSE).
