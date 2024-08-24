@@ -1,6 +1,6 @@
-[Linkedin](https://www.linkedin.com/in/matheus-mozart-borges)
-
 # Projeto API com NestJS, TypeScript, Redis, PostgreSQL, PgAdmin, Docker e TypeORM
+
+Meu [Linkedin](https://www.linkedin.com/in/matheus-mozart-borges)
 
 Este projeto é uma API desenvolvida com [NestJS](https://nestjs.com/) e [TypeScript](https://www.typescriptlang.org/), utilizando [Redis](https://redis.io/), [PostgreSQL](https://www.postgresql.org/), [TypeORM](https://typeorm.io/), [Docker](https://www.docker.com/), e [Docker Compose](https://docs.docker.com/compose/). A API recebe tokens JWT, valida com um token armazenado no Redis e interage com um banco de dados PostgreSQL.
 
