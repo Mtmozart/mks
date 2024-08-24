@@ -1,6 +1,5 @@
 [Linkedin](https://www.linkedin.com/in/matheus-mozart-borges)
 
-````markdown
 # Projeto API com NestJS, TypeScript, Redis, PostgreSQL, PgAdmin, Docker e TypeORM
 
 Este projeto é uma API desenvolvida com [NestJS](https://nestjs.com/) e [TypeScript](https://www.typescriptlang.org/), utilizando [Redis](https://redis.io/), [PostgreSQL](https://www.postgresql.org/), [TypeORM](https://typeorm.io/), [Docker](https://www.docker.com/), e [Docker Compose](https://docs.docker.com/compose/). A API recebe tokens JWT, valida com um token armazenado no Redis e interage com um banco de dados PostgreSQL.
@@ -33,6 +32,7 @@ Certifique-se de ter o seguinte instalado:
 git clone git@github.com:Mtmozart/mks.git
 cd seu-projeto
 ```
+
 ````
 
 ### Passo 2: Configurar Variáveis de Ambiente
@@ -121,3 +121,4 @@ O processo de autenticação funciona da seguinte forma:
 ## Licença
 
 Este projeto está licenciado sob a [MIT License](LICENSE).
+````
